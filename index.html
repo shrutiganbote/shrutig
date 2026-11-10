@@ -48,7 +48,7 @@
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 
   /* Falling snow / petals / stars, drawn over the page */
-  #sky { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+  #sky { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
 
   /* Reading progress line at the very top */
   #progress {
@@ -187,7 +187,6 @@
   /* Visitors who asked their device for less motion get a still page */
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
-    #sky { display: none; }
   }
 </style>
 </head>
@@ -414,6 +413,7 @@
     now = skies[theme];
     flakes = [];
     var n = now.count ? Math.round(now.count * Math.min(1, W / 900)) + 8 : 0;
+    if (calm) n = Math.round(n / 2);          // reduced motion: fewer, so it stays gentle
     for (var i = 0; i < n; i++) flakes.push(newFlake(true));
   }
 
@@ -471,21 +471,21 @@
   try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
   var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   setTheme(savedTheme || (dark ? "night" : "journey"));
-  if (!calm) requestAnimationFrame(drawSky);
+  requestAnimationFrame(drawSky);
 
   // ================= Greeting in my four languages =================
   var greetings = ["Hello", "नमस्ते", "नमस्कार", "こんにちは"];   // English, Hindi, Marathi, Japanese
   var greet = document.getElementById("greet"), g = 0;
-  if (!calm) {
-    setInterval(function () {
-      greet.classList.add("out");
-      setTimeout(function () {
-        g = (g + 1) % greetings.length;
-        greet.textContent = greetings[g];
-        greet.classList.remove("out");
-      }, 350);
-    }, 2200);
+  function nextGreeting() {
+    g = (g + 1) % greetings.length;
+    greet.textContent = greetings[g];
+    greet.classList.remove("out");
   }
+  setInterval(function () {
+    if (calm) { nextGreeting(); return; }      // reduced motion: change the word without sliding
+    greet.classList.add("out");
+    setTimeout(nextGreeting, 350);
+  }, 2200);
 
   // ================= Fade in while scrolling =================
   if (!calm && "IntersectionObserver" in window) {
