@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shruti | Indian living in Sapporo</title>
+<meta name="description" content="Shruti: a dentist turned engineer, from India, living in Sapporo.">
+<style>
+  :root {
+    --bg: #fbf8f4;
+    --card: #ffffff;
+    --text: #2b2a28;
+    --muted: #6b6762;
+    --line: #e7e1d9;
+    --warm: #d9792b;      /* spice / soup curry */
+    --cool: #3f7fa6;      /* snow / Sapporo */
+    --hero-warm: #f9dcbd;
+    --hero-cool: #d5e8f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17191c;
+      --card: #202327;
+      --text: #ecebe8;
+      --muted: #a5a29c;
+      --line: #32363b;
+      --warm: #f0a25c;
+      --cool: #7fb9dc;
+      --hero-warm: #4a3220;
+      --hero-cool: #1f3a4b;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+
+  /* Language switch */
+  .lang {
+    position: absolute; top: 16px; right: 16px;
+    display: flex; gap: 4px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px;
+  }
+  .lang button {
+    border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-size: 14px; padding: 4px 14px;
+    border-radius: 999px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+
+  /* Hero */
+  header {
+    position: relative;
+    background: linear-gradient(110deg, var(--hero-warm), var(--hero-cool));
+    padding: 96px 0 72px;
+    text-align: center;
+  }
+  .avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    margin: 0 auto 24px;
+    display: grid; place-items: center;
+    background: var(--card); color: var(--warm);
+    font-size: 52px; font-weight: 600;
+    border: 4px solid var(--card);
+    box-shadow: 0 6px 24px rgba(0,0,0,.12);
+    object-fit: cover;
+  }
+  h1 { font-size: clamp(32px, 6vw, 46px); line-height: 1.25; margin: 0 0 12px; }
+  .lead { font-size: 19px; margin: 0 0 8px; }
+  .tagline { color: var(--muted); margin: 0; }
+
+  /* Sections */
+  section { padding: 56px 0 8px; }
+  h2 {
+    font-size: 24px; margin: 0 0 20px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--line);
+  }
+  p { margin: 0 0 16px; }
+
+  /* Journey timeline */
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 28px; position: relative; }
+  .timeline::before {
+    content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px;
+    background: linear-gradient(var(--warm), var(--cool));
+  }
+  .timeline li { position: relative; padding-bottom: 24px; }
+  .timeline li::before {
+    content: ""; position: absolute; left: -28px; top: 8px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg); border: 3px solid var(--warm);
+  }
+  .timeline li:nth-child(n+4)::before { border-color: var(--cool); }
+  .timeline h3 { font-size: 18px; margin: 0 0 4px; }
+  .timeline p { margin: 0; color: var(--muted); }
+
+  /* Cards */
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px;
+  }
+  .card .icon { font-size: 30px; line-height: 1; margin-bottom: 10px; }
+  .card h3 { font-size: 18px; margin: 0 0 6px; }
+  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+  .level { color: var(--cool); font-weight: 600; }
+
+  footer {
+    margin-top: 64px; padding: 28px 0 40px;
+    border-top: 1px solid var(--line);
+    text-align: center; color: var(--muted); font-size: 15px;
+  }
+  footer a { color: var(--cool); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+  </div>
+  <div class="wrap">
+    <!-- PHOTO: to use your own photo, save it in this folder as photo.jpg,
+         delete the <div class="avatar"> line below and remove the comment marks
+         around the <img> line. -->
+    <div class="avatar" aria-hidden="true">S</div>
+    <!-- <img class="avatar" src="photo.jpg" alt="Shruti"> -->
+
+    <h1 data-i18n="hello">Hi, I'm Shruti.</h1>
+    <p class="lead" data-i18n="lead">A dentist turned engineer, from India, living in Sapporo.</p>
+    <p class="tagline" data-i18n="tagline">☀️ From a very hot country to a very cold place ❄️</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="about">
+    <h2 data-i18n="aboutTitle">About me</h2>
+    <p data-i18n="about1">I'm from India, and I now live and work in Sapporo, Japan, as an engineer at a Japanese IT company. My journey here was an unusual one: I trained and worked as a dentist before I started over from zero.</p>
+    <p data-i18n="about2">I'm an introvert. Making friends doesn't come easily to me, but I have a few. I'm not very good with words, so people sometimes misunderstand me.</p>
+  </section>
+
+  <section id="journey">
+    <h2 data-i18n="journeyTitle">My journey</h2>
+    <ol class="timeline">
+      <li>
+        <h3 data-i18n="j1t">Studying dentistry in India</h3>
+        <p data-i18n="j1d">I studied dentistry for five years and graduated from an Indian university.</p>
+      </li>
+      <li>
+        <h3 data-i18n="j2t">Two years as a dentist</h3>
+        <p data-i18n="j2d">I practised dentistry for two years, and realised I wanted to see a different world.</p>
+      </li>
+      <li>
+        <h3 data-i18n="j3t">Starting from zero</h3>
+        <p data-i18n="j3d">I decided to start my life again, on my own and on my own terms. I searched for many universities and sat many exams.</p>
+      </li>
+      <li>
+        <h3 data-i18n="j4t">Plans changed</h3>
+        <p data-i18n="j4d">Because of the pandemic most of my plans shifted, and somehow I ended up in Japan.</p>
+      </li>
+      <li>
+        <h3 data-i18n="j5t">Sapporo, Japan</h3>
+        <p data-i18n="j5d">Today I work as an engineer, and I read, write and speak Japanese in everyday life. It was the best decision.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="hobbies">
+    <h2 data-i18n="hobbiesTitle">Things I like</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="icon" aria-hidden="true">✈️</div>
+        <h3 data-i18n="h1t">Travelling</h3>
+        <p data-i18n="h1d">I like travelling and seeing new places.</p>
+      </div>
+      <div class="card">
+        <div class="icon" aria-hidden="true">☕</div>
+        <h3 data-i18n="h2t">Cafés and restaurants</h3>
+        <p data-i18n="h2d">I like eating. A lot. So I love going to cafés and restaurants.</p>
+      </div>
+      <div class="card">
+        <div class="icon" aria-hidden="true">🍛</div>
+        <h3 data-i18n="h3t">Soup curry</h3>
+        <p data-i18n="h3d">My favourite food in Sapporo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="languages">
+    <h2 data-i18n="langTitle">Languages</h2>
+    <div class="grid">
+      <div class="card">
+        <h3 data-i18n="l1t">English</h3>
+        <p class="level" data-i18n="fluent1">Fluent</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="l2t">Marathi</h3>
+        <p class="level" data-i18n="fluent2">Fluent</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="l3t">Hindi</h3>
+        <p class="level" data-i18n="fluent3">Fluent</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="l4t">Japanese</h3>
+        <p class="level">JLPT N2</p>
+        <p data-i18n="l4d">Not native level, but I use it every day at work and in daily life.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <!-- EMAIL: to show your email, put your address in the line below (both places)
+         and remove the comment marks around it. -->
+    <!-- <p><a href="mailto:YOUR-EMAIL-HERE">YOUR-EMAIL-HERE</a></p> -->
+    <p data-i18n="thanks">Thank you for visiting.</p>
+  </div>
+</footer>
+
+<script>
+  // All the text of the page in both languages.
+  // To change a sentence, edit it here (Japanese) and in the HTML above (English).
+  var text = {
+    ja: {
+      title: "シュルティ | インドから札幌へ",
+      hello: "こんにちは、シュルティです。",
+      lead: "歯科医からエンジニアへ。インドから日本・札幌へ。ちょっと変わった人生を楽しんでいます。",
+      tagline: "☀️ 年中暑い国から、冬が本気すぎる街へ ❄️",
+      aboutTitle: "自己紹介",
+      about1: "インド出身で、現在は札幌に住み、日本のIT企業でエンジニアとして働いています。ここまでの道のりは少し変わっています。歯科医として学び、働いたあと、ゼロからやり直しました。",
+      about2: "内向的な性格で、友だちを作るのは得意ではありませんが、数人の友だちがいます。言葉で伝えるのがあまり上手ではないので、誤解されてしまうこともあります。",
+      journeyTitle: "これまでの道のり",
+      j1t: "インドで歯学を学ぶ",
+      j1d: "5年間歯学を学び、インドの大学を卒業しました。",
+      j2t: "歯科医として2年間",
+      j2d: "2年間歯科医として働くなかで、違う世界を見てみたいと思うようになりました。",
+      j3t: "ゼロからのスタート",
+      j3d: "自分の力で、自分らしく、人生をもう一度始めようと決めました。たくさんの大学を調べ、多くの試験を受けました。",
+      j4t: "計画の変更",
+      j4d: "パンデミックの影響で計画のほとんどが変わり、気がつけば日本にたどり着いていました。",
+      j5t: "日本・札幌",
+      j5d: "今はエンジニアとして働き、毎日の生活の中で日本語を読み、書き、話しています。日本に来たことは、最高の決断でした。",
+      hobbiesTitle: "好きなこと",
+      h1t: "旅行",
+      h1d: "旅行をして、新しい場所を見るのが好きです。",
+      h2t: "カフェ・レストラン巡り",
+      h2d: "食べることが大好きです。とにかくたくさん食べます。なので、カフェやレストランに行くのが好きです。",
+      h3t: "スープカレー",
+      h3d: "札幌でいちばん好きな食べ物です。",
+      langTitle: "話せる言語",
+      l1t: "英語",
+      l2t: "マラーティー語",
+      l3t: "ヒンディー語",
+      l4t: "日本語",
+      fluent1: "流暢",
+      fluent2: "流暢",
+      fluent3: "流暢",
+      l4d: "ネイティブレベルではありませんが、仕事でも日常生活でも毎日使っています。",
+      thanks: "ご覧いただきありがとうございます。"
+    },
+    en: { title: document.title }
+  };
+
+  // Remember the English text that is already written in the HTML.
+  var items = document.querySelectorAll("[data-i18n]");
+  items.forEach(function (el) { text.en[el.dataset.i18n] = el.textContent; });
+
+  function setLang(lang) {
+    items.forEach(function (el) { el.textContent = text[lang][el.dataset.i18n]; });
+    document.title = text[lang].title;
+    document.documentElement.lang = lang;
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+  }
+
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.dataset.lang); });
+  });
+
+  // Start in the visitor's last choice, or Japanese if their browser is in Japanese.
+  var saved = null;
+  try { saved = localStorage.getItem("lang"); } catch (e) {}
+  var start = saved || ((navigator.language || "").indexOf("ja") === 0 ? "ja" : "en");
+  if (start === "ja") setLang("ja");
+</script>
+</body>
+</html>
