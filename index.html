@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="journey">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shruti | Indian living in Sapporo</title>
 <meta name="description" content="Shruti: a dentist turned engineer, from India, living in Sapporo.">
 <style>
-  :root {
-    --bg: #fbf8f4;
-    --card: #ffffff;
-    --text: #2b2a28;
-    --muted: #6b6762;
-    --line: #e7e1d9;
-    --warm: #d9792b;      /* spice / soup curry */
-    --cool: #3f7fa6;      /* snow / Sapporo */
-    --hero-warm: #f9dcbd;
-    --hero-cool: #d5e8f3;
+  /* ---------- Themes ----------
+     Each theme is just a set of colours. To change a theme, change its colours here. */
+  :root, [data-theme="journey"] {          /* sunrise: a new start */
+    --bg: #fff8f1;  --card: #ffffff;  --text: #33261f;  --muted: #74615a;  --line: #f1e0d2;
+    --warm: #d95f2a;  --cool: #a8456c;
+    --hero-warm: #ffd9a0;  --hero-cool: #cdb8e8;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #17191c;
-      --card: #202327;
-      --text: #ecebe8;
-      --muted: #a5a29c;
-      --line: #32363b;
-      --warm: #f0a25c;
-      --cool: #7fb9dc;
-      --hero-warm: #4a3220;
-      --hero-cool: #1f3a4b;
-    }
+  [data-theme="snow"] {                    /* Sapporo winter */
+    --bg: #f3f8fb;  --card: #ffffff;  --text: #1f2d3a;  --muted: #5d6b78;  --line: #d9e5ee;
+    --warm: #4d86c9;  --cool: #2c7aa8;
+    --hero-warm: #cde3f3;  --hero-cool: #eef5fa;
+  }
+  [data-theme="spice"] {                   /* India and soup curry */
+    --bg: #fff7ec;  --card: #fffdf8;  --text: #3a2416;  --muted: #7a5c48;  --line: #f0dcc2;
+    --warm: #d2571c;  --cool: #946400;
+    --hero-warm: #fbc78a;  --hero-cool: #f8e3ad;
+  }
+  [data-theme="sakura"] {                  /* spring in Japan */
+    --bg: #fff6f8;  --card: #ffffff;  --text: #3a2630;  --muted: #7b6069;  --line: #f3d9e1;
+    --warm: #d6487e;  --cool: #a8497a;
+    --hero-warm: #fbd0de;  --hero-cool: #fdeef1;
+  }
+  [data-theme="night"] {                   /* dark, with stars */
+    --bg: #10131c;  --card: #1a1f2c;  --text: #eceaf2;  --muted: #a3a6b8;  --line: #2b3142;
+    --warm: #f2b45c;  --cool: #8fb8f0;
+    --hero-warm: #1d2346;  --hero-cool: #0f1a2e;
   }
 
   * { box-sizing: border-box; }
@@ -37,43 +40,91 @@
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: "Segoe UI", system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+    font-family: "Segoe UI", system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Meiryo", "Nirmala UI", sans-serif;
     font-size: 17px;
     line-height: 1.75;
+    transition: background-color .5s, color .5s;
   }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
 
-  /* Language switch */
-  .lang {
-    position: absolute; top: 16px; right: 16px;
-    display: flex; gap: 4px;
+  /* Falling snow / petals / stars, drawn over the page */
+  #sky { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+
+  /* Reading progress line at the very top */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 4;
+    background: linear-gradient(90deg, var(--warm), var(--cool));
+  }
+
+  /* Theme and language switches */
+  .bar {
+    position: absolute; top: 16px; left: 16px; right: 16px;
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  }
+  .pill {
+    display: flex; gap: 2px;
     background: var(--card); border: 1px solid var(--line);
     border-radius: 999px; padding: 4px;
+    transition: background-color .5s, border-color .5s;
   }
-  .lang button {
+  .pill button {
     border: 0; background: transparent; color: var(--muted);
-    font: inherit; font-size: 14px; padding: 4px 14px;
+    font: inherit; font-size: 14px; line-height: 1.4;
     border-radius: 999px; cursor: pointer;
+    transition: transform .2s, background-color .2s;
   }
+  .lang button { padding: 4px 14px; }
   .lang button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+  .themes button { width: 32px; height: 32px; padding: 0; font-size: 17px; }
+  .themes button:hover { transform: scale(1.2) rotate(-8deg); }
+  .themes button[aria-pressed="true"] { background: var(--line); box-shadow: 0 0 0 2px var(--warm); }
 
   /* Hero */
   header {
     position: relative;
     background: linear-gradient(110deg, var(--hero-warm), var(--hero-cool));
-    padding: 96px 0 72px;
+    padding: 104px 0 72px;
     text-align: center;
+    transition: background .5s;
   }
+  header .wrap, .bar { z-index: 1; }
+  header .wrap { position: relative; }
+
+  /* Sunrise theme: morning sky with the sun coming up behind the text */
+  [data-theme="journey"] header {
+    overflow: hidden;
+    background: linear-gradient(to top, #ffe2a6 0%, #ffc391 32%, #f6a9ae 62%, #cdb8e8 100%);
+  }
+  [data-theme="journey"] header::before {
+    content: ""; position: absolute; left: 50%; bottom: -190px;
+    width: 380px; height: 380px; border-radius: 50%;
+    background: radial-gradient(circle, #fffbe6 0%, #ffe58a 30%, rgba(255,200,100,.55) 52%, rgba(255,200,100,0) 70%);
+    transform: translateX(-50%);
+    animation: sunrise 3s ease-out;
+  }
+  @keyframes sunrise {
+    from { transform: translate(-50%, 170px); opacity: .3; }
+  }
+
   .avatar {
     width: 120px; height: 120px; border-radius: 50%;
-    margin: 0 auto 24px;
+    margin: 0 auto 20px;
     display: grid; place-items: center;
     background: var(--card); color: var(--warm);
     font-size: 52px; font-weight: 600;
     border: 4px solid var(--card);
     box-shadow: 0 6px 24px rgba(0,0,0,.12);
     object-fit: cover;
+    animation: float 5s ease-in-out infinite;
   }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+
+  .greet {
+    margin: 0 0 4px; height: 1.75em;
+    color: var(--warm); font-weight: 600; letter-spacing: .04em;
+    transition: opacity .35s, transform .35s;
+  }
+  .greet.out { opacity: 0; transform: translateY(-8px); }
   h1 { font-size: clamp(32px, 6vw, 46px); line-height: 1.25; margin: 0 0 12px; }
   .lead { font-size: 19px; margin: 0 0 8px; }
   .tagline { color: var(--muted); margin: 0; }
@@ -97,8 +148,11 @@
     content: ""; position: absolute; left: -28px; top: 8px;
     width: 16px; height: 16px; border-radius: 50%;
     background: var(--bg); border: 3px solid var(--warm);
+    transition: background-color .3s, transform .3s;
   }
   .timeline li:nth-child(n+4)::before { border-color: var(--cool); }
+  .timeline li:hover::before { background: var(--warm); transform: scale(1.25); }
+  .timeline li:nth-child(n+4):hover::before { background: var(--cool); }
   .timeline h3 { font-size: 18px; margin: 0 0 4px; }
   .timeline p { margin: 0; color: var(--muted); }
 
@@ -107,11 +161,21 @@
   .card {
     background: var(--card); border: 1px solid var(--line);
     border-radius: 14px; padding: 20px;
+    transition: transform .25s, box-shadow .25s, background-color .5s, border-color .5s, opacity .6s;
   }
-  .card .icon { font-size: 30px; line-height: 1; margin-bottom: 10px; }
+  .card:hover { transform: translateY(-5px); box-shadow: 0 10px 26px rgba(0,0,0,.12); border-color: var(--warm); }
+  .card .icon { font-size: 30px; line-height: 1; margin-bottom: 10px; display: inline-block; }
+  .card:hover .icon { animation: wiggle .6s ease-in-out; }
+  @keyframes wiggle { 25% { transform: rotate(-14deg) scale(1.2); } 75% { transform: rotate(12deg) scale(1.2); } }
   .card h3 { font-size: 18px; margin: 0 0 6px; }
   .card p { margin: 0; color: var(--muted); font-size: 16px; }
   .level { color: var(--cool); font-weight: 600; }
+  .pop { cursor: pointer; user-select: none; }
+  .burst { position: fixed; z-index: 5; pointer-events: none; font-size: 24px; }
+
+  /* Things fade in as you scroll down to them */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+  .reveal.in { opacity: 1; transform: none; }
 
   footer {
     margin-top: 64px; padding: 28px 0 40px;
@@ -119,22 +183,40 @@
     text-align: center; color: var(--muted); font-size: 15px;
   }
   footer a { color: var(--cool); }
+
+  /* Visitors who asked their device for less motion get a still page */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    #sky { display: none; }
+  }
 </style>
 </head>
 <body>
 
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="progress" aria-hidden="true"></div>
+
 <header>
-  <div class="lang" role="group" aria-label="Language">
-    <button type="button" data-lang="en" aria-pressed="true">EN</button>
-    <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+  <div class="bar">
+    <div class="pill themes" role="group" aria-label="Theme">
+      <button type="button" data-theme-name="journey" title="Sunrise" aria-label="Sunrise theme" aria-pressed="true">🌅</button>
+      <button type="button" data-theme-name="snow" title="Snow" aria-label="Snow theme" aria-pressed="false">❄️</button>
+      <button type="button" data-theme-name="spice" title="Spice" aria-label="Spice theme" aria-pressed="false">🌶️</button>
+      <button type="button" data-theme-name="sakura" title="Sakura" aria-label="Sakura theme" aria-pressed="false">🌸</button>
+      <button type="button" data-theme-name="night" title="Night" aria-label="Night theme" aria-pressed="false">🌙</button>
+    </div>
+    <div class="pill lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+    </div>
   </div>
   <div class="wrap">
-    <!-- PHOTO: to use your own photo, save it in this folder as photo.jpg,
-         delete the <div class="avatar"> line below and remove the comment marks
-         around the <img> line. -->
-    <div class="avatar" aria-hidden="true">S</div>
-    <!-- <img class="avatar" src="photo.jpg" alt="Shruti"> -->
+    <!-- PHOTO: save your picture in this folder with the name photo.jpg and it
+         appears here. If there is no photo.jpg, the letter "S" is shown instead. -->
+    <img class="avatar" src="photo.jpg" alt="Shruti"
+         onerror="this.outerHTML='<div class=&quot;avatar&quot; aria-hidden=&quot;true&quot;>S</div>'">
 
+    <p class="greet" id="greet" aria-hidden="true">Hello</p>
     <h1 data-i18n="hello">Hi, I'm Shruti.</h1>
     <p class="lead" data-i18n="lead">A dentist turned engineer, from India, living in Sapporo.</p>
     <p class="tagline" data-i18n="tagline">☀️ From a very hot country to a very cold place ❄️</p>
@@ -178,17 +260,17 @@
   <section id="hobbies">
     <h2 data-i18n="hobbiesTitle">Things I like</h2>
     <div class="grid">
-      <div class="card">
+      <div class="card pop">
         <div class="icon" aria-hidden="true">✈️</div>
         <h3 data-i18n="h1t">Travelling</h3>
         <p data-i18n="h1d">I like travelling and seeing new places.</p>
       </div>
-      <div class="card">
+      <div class="card pop">
         <div class="icon" aria-hidden="true">☕</div>
         <h3 data-i18n="h2t">Cafés and restaurants</h3>
         <p data-i18n="h2d">I like eating. A lot. So I love going to cafés and restaurants.</p>
       </div>
-      <div class="card">
+      <div class="card pop">
         <div class="icon" aria-hidden="true">🍛</div>
         <h3 data-i18n="h3t">Soup curry</h3>
         <p data-i18n="h3d">My favourite food in Sapporo.</p>
@@ -231,6 +313,7 @@
 </footer>
 
 <script>
+  // ================= Language =================
   // All the text of the page in both languages.
   // To change a sentence, edit it here (Japanese) and in the HTML above (English).
   var text = {
@@ -297,6 +380,159 @@
   try { saved = localStorage.getItem("lang"); } catch (e) {}
   var start = saved || ((navigator.language || "").indexOf("ja") === 0 ? "ja" : "en");
   if (start === "ja") setLang("ja");
+
+  // Visitors who asked their device for less motion get a still page.
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ================= Sky (snow, petals, sparks, stars) =================
+  // What floats across the page in each theme: kind, colour (red,green,blue) and how many.
+  var skies = {
+    journey: { kind: "none",  rgb: "130,175,215", count: 0 },
+    snow:    { kind: "snow",  rgb: "110,165,215", count: 90 },
+    spice:   { kind: "spark", rgb: "226,120,40",  count: 45 },
+    sakura:  { kind: "petal", rgb: "236,120,165", count: 45 },
+    night:   { kind: "star",  rgb: "255,240,205", count: 110 }
+  };
+  var sky = document.getElementById("sky");
+  var pen = sky.getContext("2d");
+  var flakes = [], now = skies.journey, W = 0, H = 0;
+
+  function sizeSky() { W = sky.width = window.innerWidth; H = sky.height = window.innerHeight; }
+
+  function newFlake(anywhere) {
+    return {
+      x: Math.random() * W,
+      y: anywhere ? Math.random() * H : (now.kind === "spark" ? H + 10 : -10),
+      size: 1.5 + Math.random() * 3,
+      speed: 0.3 + Math.random() * 0.9,
+      shift: Math.random() * 6.28,
+      alpha: 0.35 + Math.random() * 0.45
+    };
+  }
+
+  function fillSky(theme) {
+    now = skies[theme];
+    flakes = [];
+    var n = now.count ? Math.round(now.count * Math.min(1, W / 900)) + 8 : 0;
+    for (var i = 0; i < n; i++) flakes.push(newFlake(true));
+  }
+
+  function drawSky(ms) {
+    var t = ms / 1000;
+    pen.clearRect(0, 0, W, H);
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i], alpha = f.alpha;
+      if (now.kind === "star") {                       // stars stay still and twinkle
+        alpha = f.alpha * (0.3 + 0.7 * Math.abs(Math.sin(t * f.speed + f.shift)));
+      } else if (now.kind === "spark") {               // sparks rise
+        f.y -= f.speed * 0.7;
+        f.x += Math.sin(t + f.shift) * 0.3;
+        if (f.y < -10) f = flakes[i] = newFlake(false);
+      } else {                                         // snow and petals fall
+        var petal = now.kind === "petal";
+        f.y += f.speed;
+        f.x += Math.sin(t * (petal ? 1.2 : 0.8) + f.shift) * (petal ? 0.9 : 0.4);
+        if (f.y > H + 10) f = flakes[i] = newFlake(false);
+      }
+      pen.fillStyle = "rgba(" + now.rgb + "," + alpha.toFixed(2) + ")";
+      pen.beginPath();
+      if (now.kind === "petal") pen.ellipse(f.x, f.y, f.size * 1.8, f.size, f.shift + t * f.speed, 0, 6.283);
+      else pen.arc(f.x, f.y, now.kind === "star" ? f.size * 0.5 : f.size, 0, 6.283);
+      pen.fill();
+    }
+    requestAnimationFrame(drawSky);
+  }
+
+  // ================= Themes =================
+  var themeButtons = document.querySelectorAll(".themes button");
+
+  function setTheme(theme) {
+    if (!skies[theme]) theme = "journey";
+    document.documentElement.setAttribute("data-theme", theme);
+    themeButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.themeName === theme ? "true" : "false");
+    });
+    fillSky(theme);
+    try { localStorage.setItem("theme", theme); } catch (e) {}
+  }
+
+  themeButtons.forEach(function (b) {
+    b.addEventListener("click", function () { setTheme(b.dataset.themeName); });
+  });
+
+  sizeSky();
+  window.addEventListener("resize", function () {
+    sizeSky();
+    fillSky(document.documentElement.getAttribute("data-theme"));
+  });
+
+  // Start in the visitor's last theme, or Night if their device is in dark mode.
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem("theme"); } catch (e) {}
+  var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(savedTheme || (dark ? "night" : "journey"));
+  if (!calm) requestAnimationFrame(drawSky);
+
+  // ================= Greeting in my four languages =================
+  var greetings = ["Hello", "नमस्ते", "नमस्कार", "こんにちは"];   // English, Hindi, Marathi, Japanese
+  var greet = document.getElementById("greet"), g = 0;
+  if (!calm) {
+    setInterval(function () {
+      greet.classList.add("out");
+      setTimeout(function () {
+        g = (g + 1) % greetings.length;
+        greet.textContent = greetings[g];
+        greet.classList.remove("out");
+      }, 350);
+    }, 2200);
+  }
+
+  // ================= Fade in while scrolling =================
+  if (!calm && "IntersectionObserver" in window) {
+    var watcher = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add("in"); watcher.unobserve(entry.target); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll("main h2, main section > p, .timeline li, .card").forEach(function (el) {
+      var order = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.transitionDelay = (el.matches(".card, .timeline li") ? order * 90 : 0) + "ms";
+      el.classList.add("reveal");
+      watcher.observe(el);
+    });
+  }
+
+  // ================= Reading progress line =================
+  var progress = document.getElementById("progress");
+  function showProgress() {
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + "%";
+  }
+  window.addEventListener("scroll", showProgress, { passive: true });
+  showProgress();
+
+  // ================= Click a hobby card: its emoji pops out =================
+  document.querySelectorAll(".pop").forEach(function (card) {
+    card.addEventListener("click", function (e) {
+      if (calm || !card.animate) return;
+      var icon = card.querySelector(".icon").textContent;
+      for (var i = 0; i < 10; i++) {
+        var bit = document.createElement("span");
+        bit.className = "burst";
+        bit.textContent = icon;
+        bit.style.left = e.clientX + "px";
+        bit.style.top = e.clientY + "px";
+        document.body.appendChild(bit);
+        var angle = Math.random() * 6.283, far = 60 + Math.random() * 80;
+        var dx = Math.cos(angle) * far, dy = Math.sin(angle) * far - 40;
+        var fly = bit.animate([
+          { transform: "translate(-50%, -50%) scale(0.6)", opacity: 1 },
+          { transform: "translate(" + dx + "px, " + dy + "px) scale(1.3) rotate(" + (Math.random() * 120 - 60) + "deg)", opacity: 0 }
+        ], { duration: 900, easing: "cubic-bezier(.2,.7,.3,1)" });
+        fly.onfinish = bit.remove.bind(bit);
+      }
+    });
+  });
 </script>
 </body>
 </html>
